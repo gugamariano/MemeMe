@@ -39,32 +39,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
 	
         super.viewDidLoad()        
-        initText()
+        initText(topText)
+		initText(bottomText)
+		reset()
         
     }
     
 	//Setup the bottom and top input text with center, capitalized, transparent background,and fit the text size.
-    func initText(){
+    func initText(inputText:UITextField){
         
-        topText.defaultTextAttributes=memeTextAttributes
-        topText.textAlignment=NSTextAlignment.Center
-        topText.autocapitalizationType=UITextAutocapitalizationType.AllCharacters
-        topText.borderStyle=UITextBorderStyle.None
-        topText.backgroundColor=UIColor.clearColor()
-        topText.sizeToFit()
-        topText.delegate=self
-        
-        
-        bottomText.defaultTextAttributes=memeTextAttributes
-        bottomText.textAlignment=NSTextAlignment.Center
-        bottomText.autocapitalizationType=UITextAutocapitalizationType.AllCharacters
-        bottomText.borderStyle=UITextBorderStyle.None
-        bottomText.backgroundColor=UIColor.clearColor()
-        bottomText.sizeToFit()
-        bottomText.delegate=self
-        
-        reset()
-        
+        inputText.defaultTextAttributes=memeTextAttributes
+        inputText.textAlignment=NSTextAlignment.Center
+        inputText.autocapitalizationType=UITextAutocapitalizationType.AllCharacters
+        inputText.borderStyle=UITextBorderStyle.None
+        inputText.backgroundColor=UIColor.clearColor()
+        inputText.sizeToFit()
+        inputText.delegate=self
         
     }
     
@@ -74,14 +64,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewWillAppear(animated)
         
 		cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
-		self.subscribeToKeyboardNotifications()
+		subscribeToKeyboardNotifications()
         
     }
     
     override func viewWillDisappear(animated: Bool) {
 	
         super.viewWillDisappear(animated)
-        self.unsubscribeFromKeyboardNotifications()
+        unsubscribeFromKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
@@ -132,12 +122,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
-    //Scroll down the vertical screen whe the keyboard dismiss.
+    //Scroll down the vertical screen when the keyboard dismiss.
     func keyboardWillShow(notification: NSNotification) {
+                
+		self.view.frame.origin.y =0
         
-        if(bottomText.isFirstResponder()){            
-            self.view.frame.origin.y -= getKeyboardHeight(notification)
-        }
     }
     
     //Get the keyboard height to use when need to scroll the screen.
@@ -165,7 +154,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 	// When the user clicks the "share" buttom, save and generate the Meme image and shows the UIActivityViewController to share the final Meme image.
     @IBAction func showActivityView(sender: AnyObject) {
         
-        let image=self.saveImage()
+        let image=generateMemedImage()
         
         let nextController=UIActivityViewController(activityItems: [image] , applicationActivities:nil)
         
@@ -173,6 +162,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             (s: String!, ok: Bool, items: [AnyObject]!, err:NSError!) -> Void in
             if ok {
                 self.dismissViewControllerAnimated(true, completion: nil)
+				saveImage(image)
             }
         }
         
@@ -219,9 +209,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.view.drawViewHierarchyInRect(self.view.frame,
             afterScreenUpdates: true)
         
-        let memedImage : UIImage =
-        
-        UIGraphicsGetImageFromCurrentImageContext()
+        let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
         
@@ -233,10 +221,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
 	//Save the generated Meme, up and bottom text and the original image in the Meme struct.
-    func saveImage() -> UIImage{
-        
-        let memeImage=generateMemedImage()
-        self.meme = Meme (topText: topText.text, bottomText:bottomText.text , image: imagePickerView.image , memedImage:memeImage)
+    func saveImage(memeImage:UIImage) -> UIImage{
+               
+        meme = Meme (topText: topText.text, bottomText:bottomText.text , image: imagePickerView.image , memedImage:memeImage)
         
         return memeImage
     }
@@ -244,9 +231,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // When the user select or take the picture, set the image and enable the cancel and share button, dismissing the UIImagePickerController.
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         
-        self.imagePickerView.image=image
-        self.shareButton.enabled=true
-        self.cancelButton.enabled=true
+        imagePickerView.image=image
+        shareButton.enabled=true
+        cancelButton.enabled=true
         
         self.dismissViewControllerAnimated(true, completion: nil)
                 
