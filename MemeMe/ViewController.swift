@@ -8,6 +8,7 @@
 
 import UIKit
 
+//Main Controller of the MemeMe app, allowing the user to get/take a picture and save and share the generated Meme.
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate
 {
     let memeTextAttributes = [
@@ -36,12 +37,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+	
+        super.viewDidLoad()        
         initText()
         
     }
     
+	//Setup the bottom and top input text with center, capitalized, transparent background,and fit the text size.
     func initText(){
         
         topText.defaultTextAttributes=memeTextAttributes
@@ -66,40 +68,46 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+	//Check if the camera is available, enabling/disablign the camera icon propertly.
     override func viewWillAppear(animated: Bool) {
+	
         super.viewWillAppear(animated)
         
-        self.subscribeToKeyboardNotifications()
-        
-        cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+		cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+		self.subscribeToKeyboardNotifications()
         
     }
     
     override func viewWillDisappear(animated: Bool) {
+	
         super.viewWillDisappear(animated)
         self.unsubscribeFromKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
+	
         super.didReceiveMemoryWarning()
         
     }
     
     
+	//Subscribe to keyboardWillShow and keyboardWillHide notifications.
     func subscribeToKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:"    , name: UIKeyboardWillShowNotification, object: nil)
         
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:"    , name: UIKeyboardWillShowNotification, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:"    , name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    
+    //Unsubscribe to keyboardWillShow and keyboardWillHide notifications.
     func unsubscribeFromKeyboardNotifications() {
+	
         NSNotificationCenter.defaultCenter().removeObserver(self, name:
             UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name:
             UIKeyboardWillHideNotification, object: nil)
     }
     
+	//Replace only the initial ("TOP" or "BOTTOM" text when the user begin editing.
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         
         if(textField.text == DEFAULT_TOP_TEXT || textField.text == DEFAULT_BOTTOM_TEXT){
@@ -108,31 +116,33 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
+	//return after done
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+	
         textField.resignFirstResponder()
         return true
     }
     
+	//Scroll up the vertical screen to show the keyboard only on bottom input text.
     func keyboardWillHide(notification: NSNotification) {
         
-        if(bottomText.isFirstResponder()){
-            
+        if(bottomText.isFirstResponder()){            
             self.view.frame.origin.y += getKeyboardHeight(notification)
         }
         
     }
     
-    
+    //Scroll down the vertical screen whe the keyboard dismiss.
     func keyboardWillShow(notification: NSNotification) {
         
-        if(bottomText.isFirstResponder()){
-            
+        if(bottomText.isFirstResponder()){            
             self.view.frame.origin.y -= getKeyboardHeight(notification)
         }
     }
     
-    
+    //Get the keyboard height to use when need to scroll the screen.
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+	
         let userInfo = notification.userInfo
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.CGRectValue().height
@@ -140,7 +150,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     
     
-    
+    // When the user clicks the Album buttom, shows the UIImagePickerController to select an image.
     @IBAction func pickAnImageFromAlbum(sender: AnyObject) {
         
         let imagePickController = UIImagePickerController()
@@ -152,6 +162,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+	// When the user clicks the "share" buttom, save and generate the Meme image and shows the UIActivityViewController to share the final Meme image.
     @IBAction func showActivityView(sender: AnyObject) {
         
         let image=self.saveImage()
@@ -170,7 +181,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     
-    
+    //When the user clicks the Camera icon (if enabled), shows the UIImagePickerController in the camera mode to take a picture.
     @IBAction func pickAnImageFromCamera(sender: AnyObject) {
         
         let imagePickController = UIImagePickerController()
@@ -181,12 +192,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.presentViewController(imagePickController, animated:true, completion: nil)
         
     }
-    
+    //When the user clicks the "Cancel" buttom (if enabled),call the  reset func.
     @IBAction func cancelAction(sender: AnyObject) {
-        reset()
-        
+        reset()        
     }
     
+	//Reset the selected image (if selected) and set the initial up and bottom text to default values.
     func reset(){
         
         bottomText.text=DEFAULT_BOTTOM_TEXT
@@ -196,7 +207,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePickerView.image=nil
     }
     
-    
+    //hide the navbar and toolbar to generate and return an UIImage from the current screen, and them enable the navbar and toolbar again.
     func generateMemedImage() -> UIImage
     {
         
@@ -221,6 +232,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return memedImage
     }
     
+	//Save the generated Meme, up and bottom text and the original image in the Meme struct.
     func saveImage() -> UIImage{
         
         let memeImage=generateMemedImage()
@@ -229,20 +241,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return memeImage
     }
     
-    
+    // When the user select or take the picture, set the image and enable the cancel and share button, dismissing the UIImagePickerController.
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        
-        
         
         self.imagePickerView.image=image
         self.shareButton.enabled=true
         self.cancelButton.enabled=true
         
         self.dismissViewControllerAnimated(true, completion: nil)
-        
-        
+                
     }
     
+	// When the user cancel the UIImagePickerController , dismiss the view.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         
         self.dismissViewControllerAnimated(true, completion: nil)
