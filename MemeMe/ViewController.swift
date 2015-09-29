@@ -125,7 +125,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     //Scroll down the vertical screen when the keyboard dismiss.
     func keyboardWillShow(notification: NSNotification) {
                 
-		self.view.frame.origin.y =0
+		self.view.frame.origin.y=0
         
     }
     
@@ -147,7 +147,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePickController.delegate=self
         imagePickController.sourceType=UIImagePickerControllerSourceType.PhotoLibrary
         
-        self.presentViewController(imagePickController, animated:true, completion: nil)
+        presentViewController(imagePickController, animated:true, completion: nil)
         
     }
     
@@ -159,17 +159,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let nextController=UIActivityViewController(activityItems: [image] , applicationActivities:nil)
         
         nextController.completionWithItemsHandler = {
-            (s: String!, ok: Bool, items: [AnyObject]!, err:NSError!) -> Void in
-            if ok {
+            activity, completed, items, error in
+            if completed {
                 self.dismissViewControllerAnimated(true, completion: nil)
-				saveImage(image)
+				self.saveImage(image)
             }
         }
         
-        self.presentViewController(nextController,animated: true, completion:nil)
+        presentViewController(nextController,animated: true, completion:nil)
         
     }
     
+    
+    func saveMemeAfterSharing(activity: String!, completed: Bool, items: [AnyObject]!, error: NSError!) {
+    
+    }
     
     //When the user clicks the Camera icon (if enabled), shows the UIImagePickerController in the camera mode to take a picture.
     @IBAction func pickAnImageFromCamera(sender: AnyObject) {
@@ -179,7 +183,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePickController.delegate=self
         imagePickController.sourceType=UIImagePickerControllerSourceType.Camera
         
-        self.presentViewController(imagePickController, animated:true, completion: nil)
+        presentViewController(imagePickController, animated:true, completion: nil)
         
     }
     //When the user clicks the "Cancel" buttom (if enabled),call the  reset func.
@@ -235,14 +239,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         shareButton.enabled=true
         cancelButton.enabled=true
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
                 
     }
     
 	// When the user cancel the UIImagePickerController , dismiss the view.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
         
     }
     
