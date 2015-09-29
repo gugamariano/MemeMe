@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -59,14 +58,6 @@
                                     <rect key="frame" x="21" y="124" width="359" height="354"/>
                                 </variation>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="6pp-Xd-r8J">
-                                <rect key="frame" x="105" y="491" width="400" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="21" y="501" width="359" height="30"/>
-                                </variation>
-                            </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="rNM-Jz-pZi">
                                 <rect key="frame" x="100" y="74" width="400" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -75,29 +66,43 @@
                                     <rect key="frame" x="21" y="60" width="359" height="30"/>
                                 </variation>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="6pp-Xd-r8J">
+                                <rect key="frame" x="105" y="491" width="400" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="21" y="501" width="359" height="30"/>
+                                </variation>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Gwz-Uf-e3e" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="1wR-75-dRU"/>
                             <constraint firstItem="8AN-3X-UgF" firstAttribute="top" secondItem="Gwz-Uf-e3e" secondAttribute="bottom" id="1zD-7m-BY0"/>
                             <constraint firstAttribute="centerX" secondItem="6pp-Xd-r8J" secondAttribute="centerX" id="62I-7L-dax"/>
-                            <constraint firstItem="ZKd-NG-v1M" firstAttribute="top" secondItem="6pp-Xd-r8J" secondAttribute="bottom" constant="30" id="9A8-nF-f9P"/>
+                            <constraint firstItem="ZKd-NG-v1M" firstAttribute="top" secondItem="6pp-Xd-r8J" secondAttribute="bottom" constant="50" id="9A8-nF-f9P"/>
                             <constraint firstItem="ZKd-NG-v1M" firstAttribute="top" secondItem="8AN-3X-UgF" secondAttribute="bottom" id="Ayf-gR-C4j"/>
                             <constraint firstItem="ZKd-NG-v1M" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="BTI-wf-x1W"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8AN-3X-UgF" secondAttribute="trailing" constant="-16" id="BXp-we-usY"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="ZKd-NG-v1M" secondAttribute="bottom" id="E9H-z6-O2F"/>
-                            <constraint firstItem="rNM-Jz-pZi" firstAttribute="top" secondItem="Gwz-Uf-e3e" secondAttribute="bottom" constant="30" id="FtO-NM-FHL"/>
+                            <constraint firstItem="rNM-Jz-pZi" firstAttribute="top" secondItem="Gwz-Uf-e3e" secondAttribute="bottom" constant="50" id="FtO-NM-FHL"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ZKd-NG-v1M" secondAttribute="trailing" constant="-16" id="MN1-NT-2jI"/>
+                            <constraint firstItem="Gwz-Uf-e3e" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="NpO-7n-JfD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Gwz-Uf-e3e" secondAttribute="trailing" constant="-16" id="ZJp-l2-bDC"/>
-                            <constraint firstItem="Gwz-Uf-e3e" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="dYX-SA-a7t"/>
+                            <constraint firstItem="Gwz-Uf-e3e" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="10" id="h5y-MJ-3A2"/>
                             <constraint firstItem="8AN-3X-UgF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="k0u-bm-F1N"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Gwz-Uf-e3e" secondAttribute="trailing" constant="-16" id="kY1-lX-tLp"/>
+                            <constraint firstItem="Gwz-Uf-e3e" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="mCt-Ja-FJp"/>
                             <constraint firstAttribute="centerX" secondItem="rNM-Jz-pZi" secondAttribute="centerX" id="pfB-p7-U1m"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="1wR-75-dRU"/>
+                                <exclude reference="NpO-7n-JfD"/>
                                 <exclude reference="ZJp-l2-bDC"/>
-                                <exclude reference="dYX-SA-a7t"/>
+                                <exclude reference="h5y-MJ-3A2"/>
+                                <exclude reference="kY1-lX-tLp"/>
+                                <exclude reference="mCt-Ja-FJp"/>
                                 <exclude reference="FtO-NM-FHL"/>
                                 <exclude reference="pfB-p7-U1m"/>
                                 <exclude reference="1zD-7m-BY0"/>
@@ -114,8 +119,11 @@
                         <variation key="widthClass=compact">
                             <mask key="constraints">
                                 <include reference="1wR-75-dRU"/>
+                                <include reference="NpO-7n-JfD"/>
                                 <include reference="ZJp-l2-bDC"/>
-                                <include reference="dYX-SA-a7t"/>
+                                <include reference="h5y-MJ-3A2"/>
+                                <include reference="kY1-lX-tLp"/>
+                                <include reference="mCt-Ja-FJp"/>
                                 <include reference="FtO-NM-FHL"/>
                                 <include reference="pfB-p7-U1m"/>
                                 <include reference="1zD-7m-BY0"/>

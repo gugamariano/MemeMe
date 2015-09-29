@@ -15,7 +15,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NSStrokeColorAttributeName : UIColor.whiteColor(),
         NSForegroundColorAttributeName : UIColor.whiteColor(),
         NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSStrokeWidthAttributeName : 2
+        NSStrokeWidthAttributeName : 3
     ]
     
     
@@ -115,17 +115,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
 	//Scroll up the vertical screen to show the keyboard only on bottom input text.
     func keyboardWillHide(notification: NSNotification) {
-        
-        if(bottomText.isFirstResponder()){            
-            self.view.frame.origin.y += getKeyboardHeight(notification)
-        }
+
+            self.view.frame.origin.y = 0
         
     }
     
     //Scroll down the vertical screen when the keyboard dismiss.
     func keyboardWillShow(notification: NSNotification) {
-                
-		self.view.frame.origin.y=0
+      
+        if(bottomText.isFirstResponder()){
+            self.view.frame.origin.y-=getKeyboardHeight(notification)
+        }
         
     }
     
@@ -171,9 +171,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     
-    func saveMemeAfterSharing(activity: String!, completed: Bool, items: [AnyObject]!, error: NSError!) {
-    
-    }
     
     //When the user clicks the Camera icon (if enabled), shows the UIImagePickerController in the camera mode to take a picture.
     @IBAction func pickAnImageFromCamera(sender: AnyObject) {
