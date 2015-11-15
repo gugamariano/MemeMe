@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditorController.swift
 //  MemeMe
 //
 //  Created by antonio silva on 9/26/15.
@@ -9,13 +9,13 @@
 import UIKit
 
 //Main Controller of the MemeMe app, allowing the user to get/take a picture and save and share the generated Meme.
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate
+class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate
 {
     let memeTextAttributes = [
         NSStrokeColorAttributeName : UIColor.whiteColor(),
         NSForegroundColorAttributeName : UIColor.whiteColor(),
         NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSStrokeWidthAttributeName : 3
+        NSStrokeWidthAttributeName : 4
     ]
     
     
@@ -30,18 +30,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var topText: UITextField!
     @IBOutlet weak var bottomText: UITextField!
     
-    var DEFAULT_TOP_TEXT:String="TOP";
-    var DEFAULT_BOTTOM_TEXT:String="BOTTOM";
+    var DEFAULT_TOP_TEXT:String="TOP"
+    var DEFAULT_BOTTOM_TEXT:String="BOTTOM"
     
-    var meme:Meme!
+    var editMeme:Meme!
     
+    var memes: [Meme] {
+        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+    }
     
     override func viewDidLoad() {
 	
         super.viewDidLoad()        
         initText(topText)
 		initText(bottomText)
-		reset()
+        
+        if(editMeme != nil) {
+            loadEditMeme()
+        }else{
+            reset()
+        }
         
     }
     
@@ -163,6 +171,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if completed {
                 self.dismissViewControllerAnimated(true, completion: nil)
 				self.saveImage(image)
+                
             }
         }
         
@@ -183,9 +192,28 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         presentViewController(imagePickController, animated:true, completion: nil)
         
     }
+    
+    
+    // When the user select or take the picture, set the image and enable the cancel and share button, dismissing the UIImagePickerController.
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        
+        imagePickerView.image=image
+        shareButton.enabled=true
+        cancelButton.enabled=true
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
     //When the user clicks the "Cancel" buttom (if enabled),call the  reset func.
     @IBAction func cancelAction(sender: AnyObject) {
-        reset()        
+        reset()
+        
+        if(memes.count > 0) {
+            let viewController = self.storyboard?.instantiateViewControllerWithIdentifier("tabViewController") as! UITabBarController
+            presentViewController(viewController, animated: true, completion:nil)
+        }
+
     }
     
 	//Reset the selected image (if selected) and set the initial up and bottom text to default values.
@@ -223,22 +251,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
 	//Save the generated Meme, up and bottom text and the original image in the Meme struct.
     func saveImage(memeImage:UIImage) -> UIImage{
-               
-        meme = Meme (topText: topText.text, bottomText:bottomText.text , image: imagePickerView.image , memedImage:memeImage)
+        
+        
+        let meme:Meme = Meme (topText: topText.text, bottomText:bottomText.text , image: imagePickerView.image , memedImage:memeImage)
+        
+        let object = UIApplication.sharedApplication().delegate
+        let appDelegate = object as! AppDelegate
+        appDelegate.memes.append(meme)
+
+        
         
         return memeImage
     }
     
-    // When the user select or take the picture, set the image and enable the cancel and share button, dismissing the UIImagePickerController.
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        
-        imagePickerView.image=image
-        shareButton.enabled=true
-        cancelButton.enabled=true
-        
-        dismissViewControllerAnimated(true, completion: nil)
-                
-    }
+    
     
 	// When the user cancel the UIImagePickerController , dismiss the view.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -247,8 +273,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+    //set the meme image to be edited
+    func setEditMeme(meme:Meme){
+        editMeme=meme
+        
+    }
     
+    //load the top and bottom labels and image to be edited and set the frame origin to (0,0)
+    func loadEditMeme(){
     
+        bottomText.text=editMeme.bottomText
+        topText.text=editMeme.topText
+        imagePickerView.image=editMeme.image
+        
+
+
+        
+
+    }
     
     
 }
