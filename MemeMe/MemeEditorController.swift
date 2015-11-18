@@ -56,7 +56,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         inputText.defaultTextAttributes=memeTextAttributes
         inputText.textAlignment=NSTextAlignment.Center
         inputText.autocapitalizationType=UITextAutocapitalizationType.AllCharacters
-        inputText.borderStyle=UITextBorderStyle.None
+        inputText.borderStyle=UITextBorderStyle.Line
         inputText.backgroundColor=UIColor.clearColor()
         inputText.sizeToFit()
         inputText.delegate=self
@@ -71,10 +71,16 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
 		cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
 		subscribeToKeyboardNotifications()
         
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
         if(editMeme != nil) {
             loadEditMeme()
         }
-        
     }
     
 
@@ -287,7 +293,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         bottomText.text=editMeme.bottomText
         topText.text=editMeme.topText
         imagePickerView.image=editMeme.image
-        
+        shareButton.enabled=true
 
 
         
