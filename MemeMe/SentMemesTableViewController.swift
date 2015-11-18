@@ -11,41 +11,44 @@ import UIKit
 
 class SentMemesTableViewController: UITableViewController{
 
-    //shourtcut to meme model defined in AppDelegate
+    ///shourtcut to meme model defined in AppDelegate
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
     }
 
-    //add the Add button to the top navbar before the view appear
+    ///add the Add button to the top navbar before the view appear
     override func viewDidLoad(){
         
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem=UIBarButtonItem(title: "Add", style: .Plain, target: self, action: "addMeme")
+        navigationItem.rightBarButtonItem=UIBarButtonItem(title: "Add", style: .Plain, target: self, action: "addMeme")
         
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.tabBarController?.tabBar.hidden=false
-        self.tableView!.reloadData()
+        super.viewWillAppear(animated)
+
+        tabBarController?.tabBar.hidden=false
+        tableView!.reloadData()
     }
     
     
-    //show the meme editor 
+    ///show the meme editor
     func addMeme(){
         
         let viewController=self.storyboard?.instantiateViewControllerWithIdentifier("memeViewController") as! MemeEditorController
-        self.presentViewController(viewController, animated: true, completion: nil)
+
+        presentViewController(viewController, animated: true, completion: nil)
         
         
     }
     
-    //get the total memes coutn
+    ///get the total memes coutn
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return memes.count
     }
     
-    //set the image, top and bottom labels to current row
+    ///set the image, top and bottom labels to current row
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("MemeTableViewCell") as! MemeTableViewCell
@@ -59,19 +62,19 @@ class SentMemesTableViewController: UITableViewController{
         return cell
     }
     
-    //when select a row, show the MemeDetailsViewController with the selected meme
+    ///when select a row, show the MemeDetailsViewController with the selected meme
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let detailController = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailsViewController") as! MemeDetailsViewController
         
         
         detailController.meme=memes[indexPath.item]
         
-        self.navigationController!.pushViewController(detailController, animated: true)
+        navigationController!.pushViewController(detailController, animated: true)
         
         
     }
     
-    //delete the seleted meme from the model and update the tableView. If the meme model is empty, shows the meme editor
+    ///delete the seleted meme from the model and update the tableView. If the meme model is empty, shows the meme editor
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if(editingStyle==UITableViewCellEditingStyle.Delete){

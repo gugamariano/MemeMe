@@ -11,7 +11,7 @@ import UIKit
 
 class SentMemesCollectionViewController: UICollectionViewController{
 
-    //shourtcut to meme model defined in AppDelegate
+    ///shourtcut to meme model defined in AppDelegate
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
     }
@@ -26,8 +26,8 @@ class SentMemesCollectionViewController: UICollectionViewController{
         
         let space: CGFloat = 0.1
         
-        let width = (self.view.frame.size.width - (2 * space)) / 3.0
-        let height = (self.view.frame.size.height - (2 * space)) / 3.0
+        let width = (view.frame.size.width - (2 * space)) / 3.0
+        let height = (view.frame.size.height - (2 * space)) / 3.0
         
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 
@@ -35,7 +35,7 @@ class SentMemesCollectionViewController: UICollectionViewController{
         flowLayout.minimumInteritemSpacing = space
         flowLayout.itemSize = CGSizeMake(width, height)
         
-        self.navigationItem.rightBarButtonItem=UIBarButtonItem(title: "Add Meme", style: .Plain, target: self, action: "addMeme")
+        navigationItem.rightBarButtonItem=UIBarButtonItem(title: "Add Meme", style: .Plain, target: self, action: "addMeme")
         
         if(memes.count == 0){
             addMeme()
@@ -45,21 +45,25 @@ class SentMemesCollectionViewController: UICollectionViewController{
         
     }
     override func viewWillAppear(animated: Bool) {
-        self.tabBarController?.tabBar.hidden=false
-        self.collectionView?.reloadData()
+        super.viewWillAppear(animated)
+
+        tabBarController?.tabBar.hidden=false
+        collectionView?.reloadData()
     }
     
 
-    //show the meme editor
+    ///show the meme editor
     func addMeme(){
         
         let viewController=self.storyboard?.instantiateViewControllerWithIdentifier("memeViewController") as! MemeEditorController
-        self.presentViewController(viewController, animated: true, completion: nil)
+
+        presentViewController(viewController, animated: true, completion: nil)
+
 
     
     }
     
-    //get the meme count from the model
+    ///get the meme count from the model
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return memes.count
         
@@ -82,14 +86,15 @@ class SentMemesCollectionViewController: UICollectionViewController{
 
     }
     
-    //show the MemeDetailsViewController when the user tap a meme
+    ///show the MemeDetailsViewController when the user tap a meme
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let detailController = self.storyboard!.instantiateViewControllerWithIdentifier("MemeDetailsViewController") as! MemeDetailsViewController
     
     
         detailController.meme=memes[indexPath.item]
         
-        self.navigationController!.pushViewController(detailController, animated: true)
+        
+        navigationController!.pushViewController(detailController, animated: true)
         
     }
     

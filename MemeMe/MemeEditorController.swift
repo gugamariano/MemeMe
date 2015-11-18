@@ -8,14 +8,15 @@
 
 import UIKit
 
-//Main Controller of the MemeMe app, allowing the user to get/take a picture and save and share the generated Meme.
+///Main Controller of the MemeMe app, allowing the user to get/take a picture and save and share the generated Meme.
 class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate
 {
     let memeTextAttributes = [
-        NSStrokeColorAttributeName : UIColor.whiteColor(),
+        NSStrokeColorAttributeName : UIColor.blackColor(),
         NSForegroundColorAttributeName : UIColor.whiteColor(),
         NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSStrokeWidthAttributeName : 4
+        NSStrokeWidthAttributeName : -3
+        
     ]
     
     
@@ -44,16 +45,12 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         super.viewDidLoad()        
         initText(topText)
 		initText(bottomText)
+        reset()
         
-        if(editMeme != nil) {
-            loadEditMeme()
-        }else{
-            reset()
-        }
         
     }
     
-	//Setup the bottom and top input text with center, capitalized, transparent background,and fit the text size.
+	///Setup the bottom and top input text with center, capitalized, transparent background,and fit the text size.
     func initText(inputText:UITextField){
         
         inputText.defaultTextAttributes=memeTextAttributes
@@ -66,7 +63,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-	//Check if the camera is available, enabling/disablign the camera icon propertly.
+	///Check if the camera is available, enabling/disablign the camera icon propertly.
     override func viewWillAppear(animated: Bool) {
 	
         super.viewWillAppear(animated)
@@ -74,7 +71,13 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
 		cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
 		subscribeToKeyboardNotifications()
         
+        if(editMeme != nil) {
+            loadEditMeme()
+        }
+        
     }
+    
+
     
     override func viewWillDisappear(animated: Bool) {
 	
@@ -89,14 +92,14 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     
-	//Subscribe to keyboardWillShow and keyboardWillHide notifications.
+	///Subscribe to keyboardWillShow and keyboardWillHide notifications.
     func subscribeToKeyboardNotifications() {
         
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:"    , name: UIKeyboardWillShowNotification, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:"    , name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    //Unsubscribe to keyboardWillShow and keyboardWillHide notifications.
+    ///Unsubscribe to keyboardWillShow and keyboardWillHide notifications.
     func unsubscribeFromKeyboardNotifications() {
 	
         NSNotificationCenter.defaultCenter().removeObserver(self, name:
@@ -105,7 +108,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
             UIKeyboardWillHideNotification, object: nil)
     }
     
-	//Replace only the initial ("TOP" or "BOTTOM" text when the user begin editing.
+	///Replace only the initial ("TOP" or "BOTTOM" text when the user begin editing.
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         
         if(textField.text == DEFAULT_TOP_TEXT || textField.text == DEFAULT_BOTTOM_TEXT){
@@ -114,30 +117,30 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         return true
     }
     
-	//return after done
+	///return after done
     func textFieldShouldReturn(textField: UITextField) -> Bool {
 	
         textField.resignFirstResponder()
         return true
     }
     
-	//Scroll up the vertical screen to show the keyboard only on bottom input text.
+	///Scroll up the vertical screen to show the keyboard only on bottom input text.
     func keyboardWillHide(notification: NSNotification) {
 
-            self.view.frame.origin.y = 0
+            view.frame.origin.y = 0
         
     }
     
-    //Scroll down the vertical screen when the keyboard dismiss.
+    ///Scroll down the vertical screen when the keyboard dismiss.
     func keyboardWillShow(notification: NSNotification) {
       
         if(bottomText.isFirstResponder()){
-            self.view.frame.origin.y-=getKeyboardHeight(notification)
+            view.frame.origin.y-=getKeyboardHeight(notification)
         }
         
     }
     
-    //Get the keyboard height to use when need to scroll the screen.
+    ///Get the keyboard height to use when need to scroll the screen.
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
 	
         let userInfo = notification.userInfo
@@ -147,7 +150,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     
     
     
-    // When the user clicks the Album buttom, shows the UIImagePickerController to select an image.
+    /// When the user clicks the Album buttom, shows the UIImagePickerController to select an image.
     @IBAction func pickAnImageFromAlbum(sender: AnyObject) {
         
         let imagePickController = UIImagePickerController()
@@ -159,7 +162,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-	// When the user clicks the "share" buttom, save and generate the Meme image and shows the UIActivityViewController to share the final Meme image.
+	/// When the user clicks the "share" buttom, save and generate the Meme image and shows the UIActivityViewController to share the final Meme image.
     @IBAction func showActivityView(sender: AnyObject) {
         
         let image=generateMemedImage()
@@ -181,7 +184,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     
     
     
-    //When the user clicks the Camera icon (if enabled), shows the UIImagePickerController in the camera mode to take a picture.
+    ///When the user clicks the Camera icon (if enabled), shows the UIImagePickerController in the camera mode to take a picture.
     @IBAction func pickAnImageFromCamera(sender: AnyObject) {
         
         let imagePickController = UIImagePickerController()
@@ -194,7 +197,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     
-    // When the user select or take the picture, set the image and enable the cancel and share button, dismissing the UIImagePickerController.
+    ///When the user select or take the picture, set the image and enable the cancel and share button, dismissing the UIImagePickerController.
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         
         imagePickerView.image=image
@@ -205,18 +208,17 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    //When the user clicks the "Cancel" buttom (if enabled),call the  reset func.
+    ///When the user clicks the "Cancel" buttom (if enabled),call the  reset func.
     @IBAction func cancelAction(sender: AnyObject) {
         reset()
         
         if(memes.count > 0) {
-            let viewController = self.storyboard?.instantiateViewControllerWithIdentifier("tabViewController") as! UITabBarController
-            presentViewController(viewController, animated: true, completion:nil)
+            dismissViewControllerAnimated(true, completion: nil)
         }
 
     }
     
-	//Reset the selected image (if selected) and set the initial up and bottom text to default values.
+	///Reset the selected image (if selected) and set the initial up and bottom text to default values.
     func reset(){
         
         bottomText.text=DEFAULT_BOTTOM_TEXT
@@ -226,16 +228,16 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         imagePickerView.image=nil
     }
     
-    //hide the navbar and toolbar to generate and return an UIImage from the current screen, and them enable the navbar and toolbar again.
+    ///hide the navbar and toolbar to generate and return an UIImage from the current screen, and them enable the navbar and toolbar again.
     func generateMemedImage() -> UIImage
     {
         
         toolBar.hidden=true
         navigationBar.hidden=true
         
-        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIGraphicsBeginImageContext(view.frame.size)
         
-        self.view.drawViewHierarchyInRect(self.view.frame,
+        view.drawViewHierarchyInRect(view.frame,
             afterScreenUpdates: true)
         
         let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -249,7 +251,7 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         return memedImage
     }
     
-	//Save the generated Meme, up and bottom text and the original image in the Meme struct.
+	///Save the generated Meme, up and bottom text and the original image in the Meme struct.
     func saveImage(memeImage:UIImage) -> UIImage{
         
         
@@ -266,20 +268,20 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     
     
     
-	// When the user cancel the UIImagePickerController , dismiss the view.
+	/// When the user cancel the UIImagePickerController , dismiss the view.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         
         dismissViewControllerAnimated(true, completion: nil)
         
     }
     
-    //set the meme image to be edited
+    ///set the meme image to be edited
     func setEditMeme(meme:Meme){
         editMeme=meme
         
     }
     
-    //load the top and bottom labels and image to be edited and set the frame origin to (0,0)
+    ///load the top and bottom labels and image to be edited and set the frame origin to (0,0)
     func loadEditMeme(){
     
         bottomText.text=editMeme.bottomText
